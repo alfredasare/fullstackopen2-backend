@@ -6,7 +6,7 @@ const Note = require("./models/note");
 const app = express();
 
 app.use(cors());
-// app.use(express.static("build"));
+app.use(express.static("build"));
 app.use(express.json());
 
 const requestLogger = (req, res, next) => {
@@ -42,7 +42,7 @@ app.get("/api/notes/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/notes", (req, res) => {
+app.post("/api/notes", (req, res, next) => {
   const { body } = req;
 
   if (!body.content) {
@@ -57,9 +57,22 @@ app.post("/api/notes", (req, res) => {
     date: new Date(),
   });
 
-  note.save().then((savedNote) => {
-    res.json(note);
-  });
+  // note
+  //   .save()
+  //   .then((savedNote) => {
+  //     res.json(savedNote.toJSON());
+  //   })
+  //   .catch((error) => next(error));
+
+  note
+    .save()
+    .then((savedNote) => {
+      return savedNote.toJSON();
+    })
+    .then((savedAndFormattedNote) => {
+      res.json(savedAndFormattedNote);
+    })
+    .catch((error) => next(error));
 });
 
 app.delete("/api/notes/:id", (req, res, next) => {
@@ -97,6 +110,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
   }
 
   next(error);
