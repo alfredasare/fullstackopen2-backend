@@ -5,7 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 const Note = require("./models/note");
 
-app.use(express.static("build"));
+app.use(express.static("./build"));
 app.use(cors());
 app.use(express.json());
 
