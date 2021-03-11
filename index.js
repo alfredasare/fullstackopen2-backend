@@ -1,11 +1,12 @@
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-const express = require("express");
-const cors = require("cors");
 const Note = require("./models/note");
-
-const app = express();
 
 app.use(express.static("build"));
 app.use(cors());
@@ -21,9 +22,9 @@ const requestLogger = (req, res, next) => {
 
 app.use(requestLogger);
 
-// app.get("/", (req, res) => {
-//   res.send("<h1>Hello World</h1>");
-// });
+app.get("/", (req, res) => {
+  res.send("<h1>Hello World</h1>");
+});
 
 app.get("/api/notes", (req, res) => {
   Note.find({}).then((notes) => {
