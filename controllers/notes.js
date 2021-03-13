@@ -19,14 +19,8 @@ notesRouter.get("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-notesRouter.post("/", (req, res, next) => {
+notesRouter.post("/", async (req, res, next) => {
   const { body } = req;
-
-  if (!body.content) {
-    return res.status(400).json({
-      error: "missing content",
-    });
-  }
 
   const note = new Note({
     content: body.content,
@@ -34,12 +28,14 @@ notesRouter.post("/", (req, res, next) => {
     date: new Date(),
   });
 
-  note
-    .save()
-    .then((savedNote) => {
-      res.json(savedNote.toJSON());
-    })
-    .catch((error) => next(error));
+  if (!body.content) {
+    return res.status(400).json({
+      error: "missing content",
+    });
+  }
+
+  const savedNote = await note.save();
+  res.json(savedNote);
 });
 
 notesRouter.delete("/:id", (req, res, next) => {
