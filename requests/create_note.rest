@@ -1,7 +1,9 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZnJlZGFzYXJlIiwiaWQiOiI2MDRlMmE3NGVhOTAzNTBmYjg0NDUxMjciLCJpYXQiOjE2MTU3NTk1MTF9.Cvv-SsoQHtdm-NEdwLNfOXo9o0aC2fpl2jN-7sj7ADI
 
 {
-    "content": "React is the best frontend framework",
-    "important": true
+  "content": "React Testing Library",
+  "important": true,
+  "user": "604e2a74ea90350fb8445127"
 }
